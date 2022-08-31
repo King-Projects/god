@@ -5,17 +5,16 @@
 
 [[ "$1" == "--debug" ]] || [[ "$1" == "-d" ]] && set -x
 
-modpath="/data/adb/modules/GOD"
+modpath="/data/adb/modules/god"
 glog="/data/media/0/ktsr/game_opt.log"
 cpid="/data/media/0/ktsr/pid"
+bbn_log="/data/media/0/ktsr/bourbon.log"
 
-notif_start() { su -lp 2000 -c "cmd notification post -S bigtext -t 'GOD is executing' tag 'Optimizing $pid...'" >/dev/null 2>&1; }
+notif_start() { su -lp 2000 -c "cmd notification post -S bigtext -t 'GOD is executing' tag 'Optimizing $game...'" >/dev/null 2>&1; }
 
 notif_end() { su -lp 2000 -c "cmd notification post -S bigtext -t 'GOD is executing' tag 'Optimizing done!'" >/dev/null 2>&1; }
 
-log_g() {
-	echo "[$(date +%T)]: [*] $1" >>"$glog"
-}
+log_g() { echo "[$(date +%T)]: [*] $1" >>"$glog"; }
 
 log_i() { echo "$1" >"$glog"; }
 
@@ -207,7 +206,7 @@ gameopt_apply() {
 }
 
 log_i "[*] Game Optimization Daemon - Improving your experience™
-Version: 0.8-r1
+Version: 0.9-r1
 
 [$(date +%T)] [*] Game Optimization Logging started
 
@@ -221,9 +220,11 @@ echo "" >"$cpid"
 		[[ ! "$pid" ]] && sleep 2
 		[[ "$pid" != "$(grep -E '[0-9]' "$cpid" | tail -1)" ]] && [[ ! "$pid" == "" ]] || [[ "$(cat "/proc/$pid/oom_score_adj")" == "0" ]] && echo "$pid" >>"$cpid" && {
 			game="$(cat /proc/"$pid"/comm)"
+			notif_start
 			log_g "$game found, optimizing..."
 			echo "" >>"$glog"
 			gameopt_apply
+			notif_end
 			log_g "Optimization done"
 			echo "" >>"$glog"
 		} || continue

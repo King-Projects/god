@@ -1,7 +1,7 @@
 id=god
 name=Game Optimization Daemon
-version=1.0.0
-versionCode=100
-author=pedro (pedrozzz0 @ GitHub), Matt Yang (yc9559 @ GitHub)
-description=A filesystem optimizer which focus on optimizing user-experience.
-build_date=Sun Aug 14 12:27:41 -03 2022
+version=0.9.0
+versionCode=090
+author=pedro (pedrozzz0 @ GitHub)
+description=A task optimizer which focus on improving gaming experience.
+build_date=Tue Aug 30 22:26:08 -03 2022
