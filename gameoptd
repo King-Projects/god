@@ -18,6 +18,13 @@ log_g() { echo "[$(date +%T)]: [*] $1" >>"$glog"; }
 
 log_i() { echo "$1" >"$glog"; }
 
+log_e() { echo "[$(date +%T)]: [!] $1" >>"$glog"; }
+
+[[ -d "/data/adb/modules/KTSR/" ]] && {
+	log_e "KTSR found, exiting..."
+	exit 1
+}
+
 # $1:task_name $2:cgroup_name $3:"cpuset"/"stune"
 change_task_cgroup() {
 	for temp_pid in $(echo "$ps_ret" | grep -i -E "$1" | awk '{print $1}'); do
