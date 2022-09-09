@@ -172,7 +172,7 @@ ORIGDIR="$MAGISKTMP/mirror"
 }
 
 # Extract files
-ui_print "[*] Extracting FSCC files..."
+ui_print "[*] Extracting gameoptd files..."
 unzip -o "$ZIPFILE" -x 'META-INF/*' 'common/functions.sh' -d "$MODPATH" >&2
 [[ -f "$MODPATH/common/addon.tar.xz" ]] && tar -xf "$MODPATH/common/addon.tar.xz" -C "$MODPATH/common" 2>/dev/null
 

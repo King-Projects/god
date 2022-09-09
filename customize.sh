@@ -1,6 +1,6 @@
 #!/system/bin/sh
-# KTSR™ by pedro (pedrozzz0 @ GitHub, pedro3z0 @ Telegram)
-# Credits: AkumaHunt3r @ GitHub, Telegram
+# Game Optimization Daemon™ by pedro (pedrozzz0 @ GitHub, pedro3z0 @ Telegram)
+# Thanks to AkumaHunt3r @ GitHub, Telegram
 # If you wanna use it as part of your project, please maintain the credits to it respective's author(s).
 # chown k1n6 pr0j3ct5 p3dr0zzz && chmod 1337 p3dr0zzz
 DEBUG=true
@@ -8,6 +8,7 @@ moddir="/data/adb/modules/"
 mkdir -p "$MODPATH/system/bin"
 rm -rf "/data/media/0/KTSR"
 mkdir -p "/data/media/0/ktsr"
+touch /data/media/0/ktsr/enable_gpu_tune
 awk '{print}' "$MODPATH/common/gameoptd_banner"
 ui_print "Version: $(grep_prop version "$MODPATH/module.prop")"
 ui_print ""
@@ -24,6 +25,7 @@ ui_print ""
 ui_print "And a special thanks to everyone that supports my project since it's born and all the others projects also."
 ui_print "With love, Pedro, #KeepTheKing. ♡"
 ui_print ""
+ui_print "If you wish to enable gpu tuning, please write 1 at the file in /sdcard/ktsr/enable_gpu_tune"
 sleep 5
 
 ui_print "[*] Fetching the latest script(s) from GitHub..."

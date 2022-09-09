@@ -21,18 +21,13 @@ init=$(date +%s)
 
 [ ! "$(grep build_date $(pwd)/module.prop)" ] && echo "build_date=$(date)" >>"$(pwd)/module.prop"
 
-vcd=$(printf "%.3d" "$((vcd + 1))")
-sed -i -e "/versionCode=/s/=.*/=$vcd/" "$(pwd)/module.prop"
-
-sed -i -e "/version=/s/=.*/=$v/" "$(pwd)/module.prop"
-
 echo ""
 echo "Build starting at $(date)"
 echo ""
 
 echo "Zipping ${blink}gameoptd-$v..."
 
-zip -0 -r9 -ll "gameoptd-$v.zip" . -x *.git* -x fscache-ctrl -x fscc -x build.sh -x _config.yml
+zip -0 -r9 -ll "gameoptd-$v.zip" . -x *.git* -x gameoptd -x build.sh -x _config.yml
 mv -f "gameoptd-$v.zip" ../out
 
 exit=$(date +%s)
