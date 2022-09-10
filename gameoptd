@@ -481,7 +481,7 @@ gpu_tune_default() {
 }
 
 log_i "[*] Game Optimization Daemon - Improving your gaming experience™
-Version: 1.0.1-r2
+Version: 1.1.0-r2
 
 [$(date +%T)]: [*] Game Optimization Logging started
 
