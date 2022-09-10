@@ -3,6 +3,7 @@
 # Thanks to tytydraco @ GitHub
 # If you wanna use it as part of your project, please maintain the credits to it respective's author(s).
 
+# For debug purposes
 [[ "$1" == "--debug" ]] || [[ "$1" == "-d" ]] && set -x
 
 # Paths
@@ -17,10 +18,11 @@ gpu_tune="/data/media/0/ktsr/gpu_tune"
 
 # Tasks
 uni_task="UnityMain|UnityGfxDeviceW|Apollo-Source|Apollo-File"
-uni_task2="UnityPreload|ace_worker|NativeThread|Thread-|UnityMultiRende|AsyncReadManage|UnityChoreograp|Worker Thread|CoreThread"
-etc_task="MIHOYO_NETWORK|Audio|tp_schedule|GVoice|FMOD mixer|FMOD stream|ff_read"
+uni_coop_task="UnityPreload|ace_worker|NativeThread|Thread-|UnityMultiRende|AsyncReadManage|UnityChoreograp|Worker Thread|CoreThread"
+etc_task="MIHOYO_NETWORK|Audio|tp_schedule|GVoice|FMOD mixer|FMOD stream|ff_read|Jit thread pool|HeapTaskDaemon|FinalizerDaemon|ReferenceQueueD"
 render_task="GameThread|Thread-|GLThread|RenderThread"
-render_task2="NativeThread|SDLThread|RHIThread|TaskGraphNP|MainThread-UE4"
+render_coop_task="NativeThread|SDLThread|RHIThread|TaskGraphNP|MainThread-UE4"
+coop_task="Jit thread pool|HeapTaskDaemon|FinalizerDaemon|ReferenceQueueD"
 
 # Games
 list_uni="com.dts.freefire|com.riotgames.|com.tencent.game.|com.tencent.lolm|com.tencent.tmgp.|com.mobile.legends|com.miHoYo.|com.ngame.allstar.eu|com.garena.game.|callofduty.shooter|com.axlebolt.standoff|flightsimulator|com.madfingergames.|com.carxtech.|DriftRacing|omin.protectors|com.sozap.|com.panzerdog.|com.netease.ddsfna|cade.next.mrglo|c.project_drift|headedshark.tco|com.tiramisu.|com.infinityvector.assolutoracing|com.nekki.shadowfight3|ite.sgameGlobal|com.gaijin.xom"
@@ -36,7 +38,7 @@ log_g() { echo "[$(date +%T)]: [*] $1" >>"$glog"; }
 
 log_i() { echo "$1" >"$glog"; }
 
-log_e() { echo "[$(date +%T)]: [!] $1" >>"$glog"; }
+log_e() { echo "[$(date +'%Y-%m-%d %T')]: [!] $1" >>"$glog"; }
 
 write() {
 	# Bail out if file does not exist
@@ -328,12 +330,13 @@ rebuild_ps_cache() { ps_ret="$(ps -Ao pid,args)"; }
 gameopt_apply() {
 	rebuild_ps_cache
 	change_thread_affinity "$list_uni" "$uni_task" "f0"
-	change_thread_affinity "$list_uni" "$uni_task2" "7f"
+	change_thread_affinity "$list_uni" "$uni_coop_task" "ff"
 	change_thread_affinity "$list_etc" "$etc_task" "0f"
 	change_other_thread_affinity "$list_uni" "ff"
 	change_thread_affinity "$list_render" "$render_task" "f0"
-	change_thread_affinity "$list_render" "$render_task2" "7f"
+	change_thread_affinity "$list_render" "$render_coop_task" "ff"
 	change_other_thread_affinity "$list_render" "ff"
+	change_thread_affinity "$list_unified" "$coop_task" "0f"
 }
 
 gpu_tune_apply() {
@@ -478,7 +481,7 @@ gpu_tune_default() {
 }
 
 log_i "[*] Game Optimization Daemon - Improving your gaming experience™
-Version: 1.0-r1
+Version: 1.0.1-r2
 
 [$(date +%T)]: [*] Game Optimization Logging started
 
