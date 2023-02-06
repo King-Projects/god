@@ -30,7 +30,6 @@ list_render="com.StudioFurukawa.|com.tencent.mf.uam|com.tencent.tmgp.|com.tencen
 list_unified="com.StudioFurukawa.|com.tencent.mf.uam|com.gaijin.xom|ting.action.pvp|ite.sgameGlobal|com.dts.freefire|squareenix.lis|com.nekki.shadowfight3|walkingdead|headedshark.tco|com.tiramisu.|com.infinityvector.assolutoracing|n.c1game.naslim|com.gamedevltd.|com.madfingergames.|cade.next.mrglo|com.netease.ddsfna|com.carxtech.|DriftRacing|omin.protectors|com.sozap.|com.panzerdog.|com.firsttouchgames.dls|ent.criticalops|flightsimulator|com.riotgames.|com.garena.game.|com.tencent.lolm|com.tencent.tmgp.|com.mobile.legends|com.tencent.tmgp.|com.miHoYo.|com.ngame.allstar.eu|callofdutyshooter|com.axlebolt.standoff|com.tencent.ig|com.netease.jddsaef|com.netease.g93na|apexlegendsmobile|com.pubg.imobile|com.netease.mrzhna|hotta.|dw.h5yvzr.yt|com.roblox.client|com.supercell.brawlstars"
 
 #Filter
-focus_filter="grep -E 'mCurrentFocus|mFocusedApp'"
 list_unified_filter="grep -o -e com.StudioFurukawa. -e com.tencent.mf.uam -e com.gaijin.xom -e ting.action.pvp -e ite.sgameGlobal -e com.dts.freefire -e squareenix.lis -e com.nekki.shadowfight3 -e walkingdead -e headedshark.tco -e com.tiramisu. -e com.infinityvector.assolutoracing -e n.c1game.naslim -e com.gamedevltd. -e com.madfingergames. -e cade.next.mrglo -e com.netease.ddsfna -e com.carxtech. -e DriftRacing -e omin.protectors -e com.sozap. -e com.panzerdog. -e com.firsttouchgames.dls -e ent.criticalops -e flightsimulator -e com.riotgames. -e com.garena.game. -e com.tencent.lolm -e com.tencent.tmgp. -e com.mobile.legends -e com.tencent.tmgp. -e com.miHoYo. -e com.ngame.allstar.eu -e callofdutyshooter -e com.axlebolt.standoff -e com.tencent.ig -e com.netease.jddsaef -e com.netease.g93na -e apexlegendsmobile -e com.pubg.imobile -e com.netease.mrzhna -e hotta. -e dw.h5yvzr.yt -e com.roblox.client -e com.supercell.brawlstars"
 ps_ret_filter_1="awk !/bindfs/"
 ps_ret_filter_2="awk !/com.tencent.soter.soterserver/"
@@ -500,7 +499,7 @@ echo "" >"$gpu_tune"
 (
 	while true; do
 		sleep 60
-window="$(dumpsys window | $focus_filter | $list_unified_filter | $line_row_filter)"
+window="$(dumpsys window | grep -E 'mCurrentFocus|mFocusedApp' | $list_unified_filter | $line_row_filter)"
 game="$(pm list package | $package_filter | grep "$window")"
 if [[ "$window" ]]
 then
