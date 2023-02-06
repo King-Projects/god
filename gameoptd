@@ -494,6 +494,7 @@ Version: 1.1.0-r2
 [$(date +%T)]: [*] Game Optimization Daemon enables you to get the best performance out of your favorite games.
 "
 
+echo "" >"$bbn_log"
 echo "" >"$gpu_tune"
 
 (
