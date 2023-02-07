@@ -35,10 +35,12 @@ list_unified="com.StudioFurukawa.|com.tencent.mf.uam|com.gaijin.xom|ting.action.
 
 while IFS= read -r line || [[ -n "$line" ]]; do
 	game=$(echo "$line" | awk '!/#/')
+	[[ ! "$game" == "" ]] && {
 	list_uni+="|"$game
 	list_etc+="|"$game
 	list_render+="|"$game
 	list_unified+="|"$game
+	}
 done < "$gcfg"
 
 # Filter
