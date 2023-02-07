@@ -31,14 +31,14 @@ list_render="com.StudioFurukawa.|com.tencent.mf.uam|com.tencent.tmgp.|com.tencen
 list_unified="com.StudioFurukawa.|com.tencent.mf.uam|com.gaijin.xom|ting.action.pvp|ite.sgameGlobal|com.dts.freefire|squareenix.lis|com.nekki.shadowfight3|walkingdead|headedshark.tco|com.tiramisu.|com.infinityvector.assolutoracing|n.c1game.naslim|com.gamedevltd.|com.madfingergames.|cade.next.mrglo|com.netease.ddsfna|com.carxtech.|DriftRacing|omin.protectors|com.sozap.|com.panzerdog.|com.firsttouchgames.dls|ent.criticalops|flightsimulator|com.riotgames.|com.garena.game.|com.tencent.lolm|com.tencent.tmgp.|com.mobile.legends|com.tencent.tmgp.|com.miHoYo.|com.ngame.allstar.eu|callofdutyshooter|com.axlebolt.standoff|com.tencent.ig|com.netease.jddsaef|com.netease.g93na|apexlegendsmobile|com.pubg.imobile|com.netease.mrzhna|hotta.|dw.h5yvzr.yt|com.roblox.client|com.supercell.brawlstars"
 
 while IFS= read -r line; do
-	game=$(echo "$line")
+	game=$(echo "$line" | awk '!/#/')
 	[[ ! "$game" == "" ]] && {
 	list_uni+="|"$game
 	list_etc+="|"$game
 	list_render+="|"$game
 	list_unified+="|"$game
 	}
-done < $gcfg
+done < "$gcfg"
 
 # Filter
 list_unified_filter="grep -Eo $list_unified"
@@ -517,7 +517,7 @@ Version: 1.2.0-r2
 [$(date +%T)]: [*] Game Optimization Daemon enables you to get the best performance out of your favorite games.
 "
 
-[[ ! "$gcfg" ]] && echo "# Game Optimization Daemon Config File
+[[ ! -f "$gcfg" ]] && echo "# Game Optimization Daemon Config File
 # Add given packages to the optimization list.
 # List all the package names of the apps which you want to be optimized.
 com.hg.wreckfest
