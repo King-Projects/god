@@ -8,7 +8,8 @@ moddir="/data/adb/modules/"
 mkdir -p "$MODPATH/system/bin"
 rm -rf "/data/media/0/KTSR"
 mkdir -p "/data/media/0/ktsr"
-touch /data/media/0/ktsr/enable_gpu_tune
+touch /data/media/0/ktsr/enable_gpu_tune.txt
+touch /data/media/0/ktsr/enable_notif.txt
 awk '{print}' "$MODPATH/common/gameoptd_banner"
 ui_print "Version: $(grep_prop version "$MODPATH/module.prop")"
 ui_print ""
@@ -46,27 +47,3 @@ ui_print "[*] Consider saving the installation logs only in case of anything goi
 ui_print ""
 ui_print "[!] Reboot to the changes be applied."
 ui_print ""
-magiskhide disable >/dev/null 2>&1
-magiskhide enable >/dev/null 2>&1
-magisk --denylist enable >/dev/null 2>&1
-magiskhide add com.tencent.ig >/dev/null 2>&1
-magiskhide add com.epicgames.fortnite >/dev/null 2>&1
-magiskhide add com.vng.pubgmobile >/dev/null 2>&1
-magiskhide add com.pubg.krmobile >/dev/null 2>&1
-magiskhide add com.activision.callofduty.shooter >/dev/null 2>&1
-magiskhide add com.garena.game.codm >/dev/null 2>&1
-magiskhide add com.pubg.newstate >/dev/null 2>&1
-magiskhide add com.plato.android >/dev/null 2>&1
-magiskhide add com.dts.freefireth >/dev/null 2>&1
-magiskhide add com.dts.freefiremax >/dev/null 2>&1
-magiskhide add com.kitkagames.fallbuddies >/dev/null 2>&1
-magisk --denylist add com.pubg.newstate >/dev/null 2>&1
-magisk --denylist add com.garena.game.codm >/dev/null 2>&1
-magisk --denylist add com.activision.callofduty.shooter >/dev/null 2>&1
-magisk --denylist add com.pubg.krmobile >/dev/null 2>&1
-magisk --denylist add com.epicgames.fortnite >/dev/null 2>&1
-magisk --denylist add com.tencent.ig >/dev/null 2>&1
-magisk --denylist add com.plato.android >/dev/null 2>&1
-magisk --denylist add com.dts.freefireth >/dev/null 2>&1
-magisk --denylist add com.dts.freefiremax >/dev/null 2>&1
-magisk --denylist add com.kitkagames.fallbuddies >/dev/null 2>&1

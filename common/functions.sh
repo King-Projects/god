@@ -8,7 +8,6 @@
 cleanup() {
 	rm -rf "$MODPATH/common" 2>/dev/null
 	rm -rf "$MODPATH/LICENSE" 2>/dev/null
-	rm -rf "$MODPATH/README.md" 2>/dev/null
 }
 
 abort() {
