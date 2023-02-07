@@ -13,9 +13,12 @@ cpid="/data/media/0/ktsr/pid"
 gcfg="/data/media/0/ktsr/game_config.txt"
 bbn_log="/data/media/0/ktsr/bourbon.txt"
 gpu_tune_enable="/data/media/0/ktsr/enable_gpu_tune.txt"
+notif_enable="/data/media/0/ktsr/enable_notif.txt"
 gpu_tune="/data/media/0/ktsr/gpu_tune"
 
 [[ "$(cat "$gpu_tune_enable")" == "1" ]] && enable_gpu_tune=1 || enable_gpu_tune=0
+
+[[ "$(cat "$notif_enable")" == "1" ]] && enable_notif=1 || enable_notif=0
 
 # Tasks
 uni_task="UnityMain|UnityGfxDeviceW|Apollo-Source|Apollo-File"
@@ -30,14 +33,12 @@ list_etc="com.StudioFurukawa.|com.dts.freefire|com.riotgames.|com.tencent.game.|
 list_render="com.StudioFurukawa.|com.tencent.mf.uam|com.tencent.tmgp.|com.tencent.ig|com.netease.jddsaef|com.netease.g93na|apexlegendsmobile|com.pubg.imobile|com.netease.mrzhna|hotta.|dw.h5yvzr.yt|com.roblox.client|com.supercell.brawlstars|com.touchgames.dls|ent.criticalops|com.gamedevltd.|n.c1game.naslim|squareenix.lis|walkingdead|ting.action.pvp"
 list_unified="com.StudioFurukawa.|com.tencent.mf.uam|com.gaijin.xom|ting.action.pvp|ite.sgameGlobal|com.dts.freefire|squareenix.lis|com.nekki.shadowfight3|walkingdead|headedshark.tco|com.tiramisu.|com.infinityvector.assolutoracing|n.c1game.naslim|com.gamedevltd.|com.madfingergames.|cade.next.mrglo|com.netease.ddsfna|com.carxtech.|DriftRacing|omin.protectors|com.sozap.|com.panzerdog.|com.firsttouchgames.dls|ent.criticalops|flightsimulator|com.riotgames.|com.garena.game.|com.tencent.lolm|com.tencent.tmgp.|com.mobile.legends|com.tencent.tmgp.|com.miHoYo.|com.ngame.allstar.eu|callofdutyshooter|com.axlebolt.standoff|com.tencent.ig|com.netease.jddsaef|com.netease.g93na|apexlegendsmobile|com.pubg.imobile|com.netease.mrzhna|hotta.|dw.h5yvzr.yt|com.roblox.client|com.supercell.brawlstars"
 
-while IFS= read -r line; do
+while IFS= read -r line || [[ -n "$line" ]]; do
 	game=$(echo "$line" | awk '!/#/')
-	[[ ! "$game" == "" ]] && {
 	list_uni+="|"$game
 	list_etc+="|"$game
 	list_render+="|"$game
 	list_unified+="|"$game
-	}
 done < "$gcfg"
 
 # Filter
@@ -359,13 +360,12 @@ rebuild_ps_cache() { ps_ret="$(ps -Ao pid,args | $ps_ret_filter_1 | $ps_ret_filt
 gameopt_apply() {
 	rebuild_ps_cache
 	change_thread_affinity "$list_uni" "$uni_task" "f0"
-	change_thread_affinity "$list_uni" "$uni_coop_task" "ff"
+	change_thread_affinity "$list_uni" "$uni_coop_task" "7f"
 	change_thread_affinity "$list_etc" "$etc_task" "0f"
 	change_other_thread_affinity "$list_uni" "ff"
 	change_thread_affinity "$list_render" "$render_task" "f0"
-	change_thread_affinity "$list_render" "$render_coop_task" "ff"
-	change_other_thread_affinity "$list_render" "ff"
-	change_thread_affinity "$list_unified" "$coop_task" "0f"
+	change_thread_affinity "$list_render" "$render_coop_task" "7f"
+	change_other_thread_affinity "$list_render" "3f"
 }
 
 gpu_tune_apply() {
@@ -510,7 +510,7 @@ gpu_tune_default() {
 }
 
 log_i "[*] Game Optimization Daemon - Improving your gaming experience™
-Version: 1.2.0-r2
+Version: 1.2.1-r2
 
 [$(date +%T)]: [*] Game Optimization Logging started
 
@@ -533,19 +533,19 @@ echo "" >"$gpu_tune"
 (
 	while true; do
 	sleep 60
-	pid="$(pgrep -f "$list_unified")"
+	pid="$(pgrep -f "$list_unified" | head -1)"
 	window="$(dumpsys window | grep -E 'mCurrentFocus|mFocusedApp' | $list_unified_filter | $line_row_filter)"
 	game="$(pm list package | $package_filter | grep "$window")"
 	[[ ! "$window" ]] && [[ "$(cat "$gpu_tune")" == "1" ]] && gpu_tune_default ||
 	[[ "$pid" != "$(grep -E '[0-9]' "$cpid" | tail -1)" ]] && [[ "$window" ]] && echo "$pid" >>"$cpid" && {
 			log_g "$game found, optimizing..."
 			echo "" >>"$glog"
-			notif_start
+			[[ "$enable_notif" == "1" ]] && notif_start
 			gameopt_apply
 			[[ "$enable_gpu_tune" == "1" ]] && gpu_tune_apply
 			log_g "Optimization done"
 			echo "" >>"$glog"
-			notif_end
+			[[ "$enable_notif" == "1" ]] && notif_end
 		} || continue
 		done
 ) &
