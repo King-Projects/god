@@ -16,6 +16,84 @@ gpu_tune_enable="/data/media/0/ktsr/enable_gpu_tune.txt"
 notif_enable="/data/media/0/ktsr/enable_notif.txt"
 gpu_tune="/data/media/0/ktsr/gpu_tune"
 
+# Terminal Menu
+menu() {
+echo ""
+echo "Game Optimization Daemon"
+echo ""
+echo "Status:"
+if [[ "$(cat "$notif_enable")" == "1" ]]
+then
+echo "Notification= Enable"
+else
+echo "Notification= Disable"
+fi
+if [[ "$(cat "$gpu_tune_enable")" == "1" ]]
+then
+echo "GPU_Tune= Enable"
+else
+echo "GPU_Tune= Disable"
+fi
+echo ""
+echo "Changes applied after reboot"
+echo ""
+select menu in Notification GPU_Tune Exit; do 
+      if [ "$menu" = "Notification" ]; then   
+notification
+    elif [ "$menu" = "GPU_Tune" ]; then 
+gputune
+    elif [ "$menu" = "Exit" ]; then 
+exit
+        else
+echo ""
+echo "Invalid"
+echo ""
+        exit
+        fi
+done
+}
+notification() {
+echo ""
+echo "Notification Control"
+echo ""
+select menu in Enable Disable; do 
+      if [ "$menu" = "Enable" ]; then       
+echo "1" > $notif_enable
+menu
+    elif [ "$menu" = "Disable" ]; then 
+echo "0" > $notif_enable
+menu
+        else
+echo ""
+echo "Invalid"
+echo ""
+        exit
+        fi
+done
+}
+gputune() {
+echo ""
+echo "GPU Tune Control"
+echo ""
+select menu in Enable Disable; do 
+      if [ "$menu" = "Enable" ]; then       
+echo "1" > $gpu_tune_enable
+menu
+    elif [ "$menu" = "Disable" ]; then 
+echo "0" > $gpu_tune_enable
+menu
+        else
+echo ""
+echo "Invalid"
+echo ""
+        menu
+        fi
+done
+}
+
+# For menu purposes
+[[ "$1" == "--menu" ]] && menu && exit
+
 [[ "$(cat "$gpu_tune_enable")" == "1" ]] && enable_gpu_tune=1 || enable_gpu_tune=0
 
 [[ "$(cat "$notif_enable")" == "1" ]] && enable_notif=1 || enable_notif=0
